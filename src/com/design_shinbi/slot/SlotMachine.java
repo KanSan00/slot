@@ -8,11 +8,12 @@ public class SlotMachine {
 	private Player player;
 	private Reel reel;
 	private Scanner scanner;
-	private int betCoin;
+	private int betCoin = 10;
 	List<Symbol> results = new ArrayList<Symbol>();
 	
     public static final int ACTION_BET   = 1;
-    public static final int ACTION_STOP = 2;
+    public static final int ACTION_CHANGE_BET = 2;
+    public static final int ACTION_STOP = 0;
 	
 	public SlotMachine(Player player) {
 		this.player = player;
@@ -26,53 +27,84 @@ public class SlotMachine {
 		 while(player.getCoin() > 0) {
 			 System.out.println("============================================");
 			 System.out.println("現在の所持コイン: " + player.getCoin() + "枚");
-			 System.out.println("BET枚数を決めてください");
-			 String input = this.scanner.nextLine();
-			 betCoin = Integer.parseInt(input);
-			 if(player.getCoin() >= betCoin) {
-				 int action = selectAction();
-				 // 回す
-				 if(action == ACTION_BET) {
-					// コイン消費
-					 player.useCoin(betCoin);
-					 // スロット回転
-					 results = reel.spin();
-					 // あたりはずれの結果の表示
-					 result(results);	
-				 } else {
-					 // やめる
-					 System.out.println("ゲーム終了");
-					 System.exit(0);
-					 break;
-				 }			 
+			 System.out.println("初期BET枚数： "+betCoin+"枚");
+			 
+			 int action = selectAction();
+			 
+			 if(action == ACTION_BET) {
+				 
+				 if(player.getCoin() < betCoin) {
+					 System.out.println("コインの枚数が足りません。");
+					 continue;
+				 }
+				 
+				 // コイン消費
+				 player.useCoin(betCoin);
+				 // スロット回転
+				 results = reel.spin();
+				 // あたりはずれの結果の表示
+				 result(results);	
+			 } else if(action == ACTION_CHANGE_BET) {
+				 changeBet();
 			 }
 			 else {
-				 System.out.println("その枚数を持っていません。");
-				 continue;
+				 // やめる
+				 System.out.println("ゲーム終了");
+				 System.exit(0);
+				 break;
+			 }			 
+			 
+			 
+			 if(player.getCoin() >= betCoin) {
+				 // 回す
+			 }
+			 else {
+				 System.out.println("コインがなくなりました");
+				 System.exit(0);
+				 break;
 			 }
 		 }
-		 System.out.println("コインがなくなりました");
-		 System.exit(0);
 	}
 	
 	private int selectAction() {
 		String selectMessage = String.format(
-	            "[%d] BET (スロットを回す), [%d] STOP (やめる)",
-	            ACTION_BET, ACTION_STOP);
+	            "[%d] BET (スロットを回す),[%d] BET変更 [%d] STOP (やめる)",
+	            ACTION_BET, ACTION_CHANGE_BET, ACTION_STOP);
 		System.out.println(selectMessage);
 		
-		int action = 0;
-		while(action != ACTION_BET && action != ACTION_STOP) {
-			String input = this.scanner.nextLine();
-			try {
-					action = Integer.parseInt(input);
-				}
-			catch(Exception e) {
-				 System.out.println("[1]or[2]を選択してください。");
-				 continue;
-				}
-		}
+		int action = -1;
+		while(action != ACTION_BET
+	            && action != ACTION_CHANGE_BET
+	            && action != ACTION_STOP) {
+
+	        try {
+
+	            action = Integer.parseInt(scanner.nextLine());
+
+	        } catch(Exception e) {
+
+	            System.out.println("正しい数値を入力してください");
+	            continue;
+	        }
+	    }
 		return action;
+	}
+	
+	/**
+	 * BET枚数を変えられる
+	 */
+	private void changeBet() {
+		System.out.println("BET枚数を入力してください");
+	    try {
+	    	int newBet = Integer.parseInt(scanner.nextLine());
+	    	if(newBet > 0 && newBet <= player.getCoin()) {
+	    		betCoin = newBet;
+	        } else {
+	        	System.out.println("設定できません");
+	        }
+	    } catch(Exception e) {
+	    	System.out.println("数値を入力してください");
+	    }
 	}
 	
 	private void result(List<Symbol> results) {

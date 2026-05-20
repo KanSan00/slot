@@ -9,7 +9,7 @@ public class Reel {
 	
     private List<Symbol> symbols;
     private Random rand;
-    Scanner scanner;
+    private Scanner scanner;
 
     public Reel(List<Symbol> symbols, Scanner scanner) {
         this.symbols = symbols;
@@ -21,23 +21,15 @@ public class Reel {
     	return this.symbols;
     }
     
-    public Symbol getSymbol() {
-    	return this.getSymbol();
-    }
-    
     public List<Symbol> spin() {
- 
+    	
 		List<Symbol> results = new ArrayList<Symbol>();
-		Symbol result = null;
 		System.out.println("Enterを押してください！");
 		for(int i = 0; i < 3; i++) {
 			this.scanner.nextLine();
-			result = randomSymbole();
-			results.add(result);
+			results.add(randomSymbol());
 			System.out.println(results);
 		}
-		
-
 		return results;
 	}
     
@@ -45,7 +37,7 @@ public class Reel {
      * 重み付き抽選
      * @return
      */
-    private Symbol randomSymbole(){
+    private Symbol randomSymbol(){
     	int totalRate = 0;
         // 合計計算
         for(Symbol symbol : symbols) {

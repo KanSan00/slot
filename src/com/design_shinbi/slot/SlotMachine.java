@@ -17,7 +17,8 @@ public class SlotMachine {
 	public SlotMachine(Player player) {
 		this.player = player;
 		this.scanner = new Scanner(System.in);
-		// List.ofこれをやることで全部を取得できる
+		// List.ofこれをやることで全部を取得できる(なんか不変のリストを返すらしい。
+		//引数には最大255個まで。ただし、配列を引数に渡す場合はこの限りではないらしい)
 		reel = new Reel(List.of(Symbol.values()), scanner);	
 	}
 	

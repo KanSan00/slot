@@ -66,6 +66,10 @@ public class SlotMachine {
 		 }
 	}
 	
+	/**
+	 * ゲームをするか、BET枚数を変えるか、やめるかの選択を表示する
+	 * @return
+	 */
 	private int selectAction() {
 		String selectMessage = String.format(
 	            "[%d] BET (スロットを回す),[%d] BET変更 [%d] STOP (やめる)",
@@ -107,6 +111,10 @@ public class SlotMachine {
 	    }
 	}
 	
+	/**
+	 * 当たった柄によってもらえる額が変わるようにしてある
+	 * @param results
+	 */
 	private void result(List<Symbol> results) {
 
 		if(results.get(0) == Symbol.SEVEN
@@ -128,6 +136,10 @@ public class SlotMachine {
 		}
 	}
 	
+	/**
+	 * もらえる額の計算処理
+	 * @param results
+	 */
 	private void payout(List<Symbol> results) {
 		int payoutCoin = 0;
 		 payoutCoin = betCoin * results.get(0).getPayout();

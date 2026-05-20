@@ -21,6 +21,10 @@ public class Reel {
     	return this.symbols;
     }
     
+    /**
+     * 抽選処理の始まり
+     * @return
+     */
     public List<Symbol> spin() {
     	
 		List<Symbol> results = new ArrayList<Symbol>();

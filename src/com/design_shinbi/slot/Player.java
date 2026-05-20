@@ -8,6 +8,10 @@ public class Player {
 		return coin;
 	}
 
+	/**
+	 * コインの追加
+	 * @param addCoin
+	 */
 	public void addCoin(int addCoin) {
 		coin += addCoin;
 	}

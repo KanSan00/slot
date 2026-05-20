@@ -1,6 +1,7 @@
 package com.design_shinbi.slot;
 
 public enum Symbol {
+	// 何か追加するときはここに追加するだけ
 	SEVEN("7", 5, 10),
     BAR("BAR", 15, 5),
     CHERRY("🍒", 30, 3),

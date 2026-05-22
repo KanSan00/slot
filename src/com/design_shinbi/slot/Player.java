@@ -4,22 +4,30 @@ public class Player {
 
 	private int coin = 0;
 	private int debtCoin = 0;
-	private Boolean debt = false;
+	private Boolean isDebt = false;
 	
 	public int getCoin() {
 		return this.coin;
+	}
+	
+	public void setCoin(int coin) {
+		this.coin = coin;
 	}
 	
 	public int getDebtCoin() {
 		return this.debtCoin;
 	}
 	
-	public Boolean getDebt() {
-		return this.debt;
+	public void setDebtCoin(int debtCoin) {
+		this.debtCoin = debtCoin;
 	}
 	
-	public void setDebt(Boolean debt) {
-		this.debt = debt;
+	public Boolean getIsDebt() {
+		return this.isDebt;
+	}
+	
+	public void setIsDebt(Boolean debt) {
+		this.isDebt = debt;
 	}
 
 	/**

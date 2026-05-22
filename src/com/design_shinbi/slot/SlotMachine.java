@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.design_shinbi.slot.save.SaveData;
+import com.design_shinbi.slot.save.SaveManager;
+
 public class SlotMachine {
 
 	private Player player;
@@ -32,9 +35,8 @@ public class SlotMachine {
 		
 		 while(player.getCoin() > 0) {
 			 System.out.println("============================================");
-			 
 			 System.out.println("現在の所持コイン: " + player.getCoin() + "枚");
-			 if(player.getDebt()) {
+			 if(player.getIsDebt()) {
 				 System.out.println("現在の借金額: " + player.getDebtCoin() + "枚");
 			 }
 			 System.out.println("初期BET枚数： "+betCoin+"枚");
@@ -67,6 +69,7 @@ public class SlotMachine {
 			 else {
 				 // やめる
 				 System.out.println("ゲーム終了");
+				 save();
 				 break;
 			 }			 
 			 
@@ -82,13 +85,14 @@ public class SlotMachine {
 				 }
 				 else {
 					 System.out.println("ゲームを終了します。");
+					 save();
 					 break;
 				 }
 				 continue;
 			 }
 			 else if(player.getCoin() <= 0 && player.getDebtCoin() > 0){
 				 System.out.println("借金してでも返してもらおうか");
-				 player.setDebt(true);
+				 player.setIsDebt(true);
 				 player.addDebtCoin(100);
 				 player.addCoin(100);
 				 continue;
@@ -165,7 +169,7 @@ public class SlotMachine {
 		System.out.println("借金する額を入力してください");
 		try {
 				int debtCoin = Integer.parseInt(scanner.nextLine());
-				player.setDebt(true);
+				player.setIsDebt(true);
 				player.addDebtCoin(debtCoin);
 				player.addCoin(debtCoin);
 			}
@@ -175,7 +179,7 @@ public class SlotMachine {
 	}
 	
 	private void repayment() {
-		if(!player.getDebt()) {
+		if(!player.getIsDebt()) {
 			System.out.println("あなたは借金していません。");
 			return;
 		}
@@ -185,13 +189,13 @@ public class SlotMachine {
 		try {
 			int repaymentCoin = Integer.parseInt(scanner.nextLine());
 			if(repaymentCoin < player.getCoin()) {
-				if(player.getDebt()) {
+				if(player.getIsDebt()) {
 					player.divDebtCoin(repaymentCoin);
 					player.useCoin(repaymentCoin);
 					System.out.println("残りの返済額： "+player.getDebtCoin());
 				}
 				if(player.getDebtCoin() <= 0) {
-					player.setDebt(false);
+					player.setIsDebt(false);
 				}
 			}
 			else {
@@ -245,4 +249,8 @@ public class SlotMachine {
 		 System.out.println("\u001B[33m"+payoutCoin+"枚獲得!!" + "\u001B[0m");
 	}
 	
+	private void save() {
+		 SaveData data = new SaveData(player.getCoin(), player.getDebtCoin(), player.getIsDebt());
+		 SaveManager.save(data);
+	}
 }

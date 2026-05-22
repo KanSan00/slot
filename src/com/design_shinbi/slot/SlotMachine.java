@@ -12,6 +12,8 @@ public class SlotMachine {
 	private Reel reel;
 	private Scanner scanner;
 	private int betCoin = 4;
+	private int bonusCount = 5;
+	private Boolean isBonus = false;
 	List<Symbol> results = new ArrayList<Symbol>();
 	
     public static final int ACTION_BET   = 1;
@@ -37,6 +39,11 @@ public class SlotMachine {
 		}
 		
 		 while(player.getCoin() > 0) {
+			 
+			 if(isBonus) {
+				    System.out.println("★★ BONUS中 残り" + bonusCount + "回 ★★");
+			}
+			 
 			 System.out.println("============================================");
 			 System.out.println("現在の所持コイン: " + player.getCoin() + "枚");
 			 if(player.getIsDebt()) {
@@ -53,9 +60,10 @@ public class SlotMachine {
 					 System.out.println("コインの枚数が足りません。");
 					 continue;
 				 }
-				 
-				 // コイン消費
-				 player.useCoin(betCoin);
+				 if(!isBonus) {					 
+					 // コイン消費
+					 player.useCoin(betCoin);
+				 }
 				 // スロット回転
 				 results = reel.spin();
 				 // あたりはずれの結果の表示
@@ -230,10 +238,11 @@ public class SlotMachine {
 	 */
 	private void result(List<Symbol> results) {
 
-		if(results.get(0) == Symbol.SEVEN
-				&& results.get(1) == Symbol.SEVEN 
-				&& results.get(2) == Symbol.SEVEN) {
+		if(countSymbol(results, Symbol.SEVEN) >= 3) {
 			 System.out.println("777!!");
+			 
+			 isBonus = true;
+			 
 			 payout(results);
 		}
 		else if(results.get(0) == Symbol.BAR
@@ -272,7 +281,7 @@ public class SlotMachine {
 	}
 	
 	/**
-	 * 現状チェリー用のカウントチェック関数
+	 * 現状絵柄のカウントチェック関数
 	 * @param results
 	 * @param target
 	 * @return
@@ -294,6 +303,16 @@ public class SlotMachine {
 	private void payout(List<Symbol> results) {
 		int payoutCoin = 0;
 		 payoutCoin = betCoin * results.get(0).getPayout();
+		 
+		 if(isBonus) {
+			 bonusCount--;
+			 payoutCoin *= 2;
+			 if(bonusCount <= 0) {
+				 isBonus = false;
+				 System.out.println("ボーナス終了！");
+			 }
+		 }
+		 
 		 player.addCoin(payoutCoin);
 		 System.out.println("\u001B[33m"+payoutCoin+"枚獲得!!" + "\u001B[0m");
 	}

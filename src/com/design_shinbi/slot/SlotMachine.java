@@ -26,8 +26,13 @@ public class SlotMachine {
 	}
 	
 	public void start() {
+		if(player.getCoin() <= 0) {
+			payment();
+		}
+		
 		 while(player.getCoin() > 0) {
 			 System.out.println("============================================");
+			 
 			 System.out.println("現在の所持コイン: " + player.getCoin() + "枚");
 			 if(player.getDebt()) {
 				 System.out.println("現在の借金額: " + player.getDebtCoin() + "枚");
@@ -71,7 +76,15 @@ public class SlotMachine {
 			 }else if(player.getCoin() <= 0 && player.getDebtCoin() <= 0) {
 				 System.out.println("コインがなくなりました");
 				 System.out.println("もう一度遊びますか？");
-				 break;
+				 action = selectOnemore();
+				 if(action == ACTION_BET) {					 
+					 payment();
+				 }
+				 else {
+					 System.out.println("ゲームを終了します。");
+					 break;
+				 }
+				 continue;
 			 }
 			 else if(player.getCoin() <= 0 && player.getDebtCoin() > 0){
 				 System.out.println("借金してでも返してもらおうか");
@@ -106,6 +119,24 @@ public class SlotMachine {
 
 	        } catch(Exception e) {
 
+	            System.out.println("正しい数値を入力してください");
+	            continue;
+	        }
+	    }
+		return action;
+	}
+	
+	private int selectOnemore() {
+		String selectMessage = String.format(
+	            "[%d] START [%d] STOP (やめる)",
+	            ACTION_BET, ACTION_STOP);
+		System.out.println(selectMessage);
+		
+		int action = -1;
+		while(action != ACTION_BET && action != ACTION_STOP) {
+	        try {
+	            action = Integer.parseInt(scanner.nextLine());
+	        } catch(Exception e) {
 	            System.out.println("正しい数値を入力してください");
 	            continue;
 	        }
@@ -195,6 +226,12 @@ public class SlotMachine {
 		}else {
 			 System.out.println("はずれ");
 		}
+	}
+	
+	private void payment() {
+		System.out.println("使用するコインの枚数を入力してください");
+		int payment = Integer.parseInt(scanner.nextLine());
+		player.addCoin(payment);
 	}
 	
 	/**

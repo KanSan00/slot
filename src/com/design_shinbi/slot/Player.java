@@ -2,7 +2,7 @@ package com.design_shinbi.slot;
 
 public class Player {
 
-	private int coin = 100;
+	private int coin = 0;
 	private int debtCoin = 0;
 	private Boolean debt = false;
 	

@@ -241,10 +241,26 @@ public class SlotMachine {
 				&& results.get(2) == Symbol.BAR) {
 			payout(results);
 		}
+		// チェリー2個以上
+		else if(countSymbol(results, Symbol.CHERRY) >= 2) {
+			
+			System.out.println("チェリー賞！");
+			System.out.println(betCoin+"枚");
+			player.addCoin(betCoin);
+		}
+		// ベルが当たった時の救済処理
+		else if(countSymbol(results, Symbol.BELL) >= 2) {
+			
+			System.out.println("ベル賞！");
+			int coin = betCoin / 2;
+			System.out.println(coin+"枚");
+			player.addCoin(coin);
+		}
 		else if(results.get(0) == results.get(1)
 	            && results.get(1) == results.get(2)) {
 			payout(results);
-		}else {
+		}
+		else {
 			 System.out.println("はずれ");
 		}
 	}
@@ -253,6 +269,22 @@ public class SlotMachine {
 		System.out.println("使用するコインの枚数を入力してください");
 		int payment = Integer.parseInt(scanner.nextLine());
 		player.addCoin(payment);
+	}
+	
+	/**
+	 * 現状チェリー用のカウントチェック関数
+	 * @param results
+	 * @param target
+	 * @return
+	 */
+	private int countSymbol(List<Symbol> results, Symbol target) {
+	    int count = 0;
+	    for(Symbol symbol : results) {
+	        if(symbol == target) {
+	            count++;
+	        }
+	    }
+	    return count;
 	}
 	
 	/**

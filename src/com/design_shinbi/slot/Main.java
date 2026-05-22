@@ -10,5 +10,4 @@ public class Main {
 		SlotMachine slotMachine = new SlotMachine(player);
 		slotMachine.start();
 	}
-
 }

@@ -33,7 +33,6 @@ public class SaveManager {
             	FileReader reader = new FileReader("save/save.json");
             	SaveData data = gson.fromJson(reader, SaveData.class);
             	reader.close();
-            	System.out.println(data.getCoin());
             	player.setCoin(data.getCoin());
             	player.setDebtCoin(data.getDebtCoin());
             	player.setIsDebt(data.getIsDebt());

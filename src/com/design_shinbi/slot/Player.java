@@ -2,10 +2,24 @@ package com.design_shinbi.slot;
 
 public class Player {
 
-	int coin = 100;
+	private int coin = 100;
+	private int debtCoin = 0;
+	private Boolean debt = false;
 	
 	public int getCoin() {
-		return coin;
+		return this.coin;
+	}
+	
+	public int getDebtCoin() {
+		return this.debtCoin;
+	}
+	
+	public Boolean getDebt() {
+		return this.debt;
+	}
+	
+	public void setDebt(Boolean debt) {
+		this.debt = debt;
 	}
 
 	/**
@@ -22,5 +36,13 @@ public class Player {
 	 */
 	public void useCoin(int useCoin) {
 		coin -= useCoin;
+	}
+	
+	public void addDebetCoin(int addDebtCoin) {
+		debtCoin += addDebtCoin;
+	}
+	
+	public void divDebtCoin(int divDebtCoin) {
+		debtCoin -= divDebtCoin;
 	}
 }

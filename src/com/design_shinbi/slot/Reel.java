@@ -29,10 +29,16 @@ public class Reel {
     	
 		List<Symbol> results = new ArrayList<Symbol>();
 		System.out.println("Enterを押してください！");
+		
+		showReels(results);
+		
 		for(int i = 0; i < 3; i++) {
 			this.scanner.nextLine();
 			results.add(randomSymbol());
-			System.out.println(results);
+			
+			showReels(results);
+			
+			//System.out.println(results);
 		}
 		return results;
 	}
@@ -62,5 +68,17 @@ public class Reel {
     	
     	// 一番しょぼいやつ返しておく
     	return Symbol.BELL;
+    }
+    
+    private void showReels(List<Symbol> result) {
+    	for(int i = 0; i < 3; i++) {
+    		if(i < result.size()) {
+    			System.out.print("["+result.get(i).getDisplayName()+"]");
+    		}
+    		else {
+    			System.out.print("[???]");
+    		}
+    	}
+    	 System.out.println();
     }
 }

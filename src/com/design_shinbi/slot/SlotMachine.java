@@ -8,11 +8,13 @@ public class SlotMachine {
 	private Player player;
 	private Reel reel;
 	private Scanner scanner;
-	private int betCoin = 10;
+	private int betCoin = 4;
 	List<Symbol> results = new ArrayList<Symbol>();
 	
     public static final int ACTION_BET   = 1;
     public static final int ACTION_CHANGE_BET = 2;
+    public static final int ACTION_DEBT = 3;
+    public static final int ACTIN_REPAYMENT = 4;
     public static final int ACTION_STOP = 0;
 	
 	public SlotMachine(Player player) {
@@ -27,6 +29,9 @@ public class SlotMachine {
 		 while(player.getCoin() > 0) {
 			 System.out.println("============================================");
 			 System.out.println("現在の所持コイン: " + player.getCoin() + "枚");
+			 if(player.getDebt()) {
+				 System.out.println("現在の借金額: " + player.getDebtCoin() + "枚");
+			 }
 			 System.out.println("初期BET枚数： "+betCoin+"枚");
 			 
 			 int action = selectAction();
@@ -44,24 +49,36 @@ public class SlotMachine {
 				 results = reel.spin();
 				 // あたりはずれの結果の表示
 				 result(results);	
-			 } else if(action == ACTION_CHANGE_BET) {
+			 } 
+			 else if(action == ACTION_CHANGE_BET) {
 				 changeBet();
+			 }
+			 else if(action == ACTION_DEBT) {
+				 debt();
+			 }
+			 else if(action == ACTIN_REPAYMENT) {
+				 repayment();
 			 }
 			 else {
 				 // やめる
 				 System.out.println("ゲーム終了");
-				 System.exit(0);
 				 break;
 			 }			 
 			 
-			 
-			 if(player.getCoin() >= betCoin) {
-				 // 回す
-			 }
-			 else {
+			 if(player.getCoin() > 0 && player.getCoin() < betCoin) {
+				 System.out.println("BET枚数を変更してください");
+				 changeBet();
+			 }else if(player.getCoin() <= 0 && player.getDebtCoin() <= 0) {
 				 System.out.println("コインがなくなりました");
-				 System.exit(0);
+				 System.out.println("もう一度遊びますか？");
 				 break;
+			 }
+			 else if(player.getCoin() <= 0 && player.getDebtCoin() > 0){
+				 System.out.println("借金してでも返してもらおうか");
+				 player.setDebt(true);
+				 player.addDebetCoin(100);
+				 player.addCoin(100);
+				 continue;
 			 }
 		 }
 	}
@@ -72,13 +89,15 @@ public class SlotMachine {
 	 */
 	private int selectAction() {
 		String selectMessage = String.format(
-	            "[%d] BET (スロットを回す),[%d] BET変更 [%d] STOP (やめる)",
-	            ACTION_BET, ACTION_CHANGE_BET, ACTION_STOP);
+	            "[%d] BET (スロットを回す),[%d] BET変更 [%d] 借金 [%d] 返済 [%d] STOP (やめる)",
+	            ACTION_BET, ACTION_CHANGE_BET, ACTION_DEBT, ACTIN_REPAYMENT, ACTION_STOP);
 		System.out.println(selectMessage);
 		
 		int action = -1;
 		while(action != ACTION_BET
 	            && action != ACTION_CHANGE_BET
+	            && action != ACTION_DEBT
+	            && action != ACTIN_REPAYMENT
 	            && action != ACTION_STOP) {
 
 	        try {
@@ -109,6 +128,48 @@ public class SlotMachine {
 	    } catch(Exception e) {
 	    	System.out.println("数値を入力してください");
 	    }
+	}
+	
+	private void debt() {
+		System.out.println("借金する額を入力してください");
+		try {
+				int debtCoin = Integer.parseInt(scanner.nextLine());
+				player.setDebt(true);
+				player.addDebetCoin(debtCoin);
+				player.addCoin(debtCoin);
+			}
+			catch(Exception e) {
+		    	System.out.println("数値を入力してください");
+			}
+	}
+	
+	private void repayment() {
+		if(!player.getDebt()) {
+			System.out.println("あなたは借金していません。");
+			return;
+		}
+		
+		
+		System.out.println("返済する額を入力してください");
+		try {
+			int repaymentCoin = Integer.parseInt(scanner.nextLine());
+			if(repaymentCoin < player.getCoin()) {
+				if(player.getDebt()) {
+					player.divDebtCoin(repaymentCoin);
+					player.useCoin(repaymentCoin);
+					System.out.println("残りの返済額： "+player.getDebtCoin());
+				}
+				if(player.getDebtCoin() <= 0) {
+					player.setDebt(false);
+				}
+			}
+			else {
+				System.out.println("手持ちから可能な額を返済してください");
+			}
+		}
+		catch(Exception e) {
+			System.out.println("数値を入力してください");
+		}
 	}
 	
 	/**
@@ -144,6 +205,7 @@ public class SlotMachine {
 		int payoutCoin = 0;
 		 payoutCoin = betCoin * results.get(0).getPayout();
 		 player.addCoin(payoutCoin);
-		 System.out.println(payoutCoin+"枚獲得!!");
+		 System.out.println("\u001B[33m"+payoutCoin+"枚獲得!!" + "\u001B[0m");
 	}
+	
 }

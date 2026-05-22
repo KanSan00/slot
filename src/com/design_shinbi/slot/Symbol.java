@@ -2,10 +2,14 @@ package com.design_shinbi.slot;
 
 public enum Symbol {
 	// 何か追加するときはここに追加するだけ
-	SEVEN("7", 5, 10),
-    BAR("BAR", 15, 5),
-    CHERRY("🍒", 30, 3),
-    BELL("🔔", 50, 2);
+	SEVEN("7", 5, 200),
+	BAR("BAR", 10, 100),
+	APPLE("🍎", 10, 40),
+	ORANGE("🍊", 10, 30),
+	GRAPE("🍇", 10, 30),
+	CHERRY("🍒", 15, 20),
+	WATERMELON("🍉", 15, 20),
+	BELL("🔔", 25, 10);
 	
 	private String displayName;
 	private int rate;

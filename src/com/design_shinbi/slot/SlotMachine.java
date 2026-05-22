@@ -137,6 +137,10 @@ public class SlotMachine {
 		return action;
 	}
 	
+	/**
+	 * もう一度遊ぶかどうか
+	 * @return
+	 */
 	private int selectOnemore() {
 		String selectMessage = String.format(
 	            "[%d] START [%d] STOP (やめる)",
@@ -172,6 +176,9 @@ public class SlotMachine {
 	    }
 	}
 	
+	/**
+	 * 借金
+	 */
 	private void debt() {
 		System.out.println("借金する額を入力してください");
 		try {
@@ -185,6 +192,9 @@ public class SlotMachine {
 			}
 	}
 	
+	/**
+	 * 返済
+	 */
 	private void repayment() {
 		if(!player.getIsDebt()) {
 			System.out.println("あなたは借金していません。");
@@ -256,6 +266,9 @@ public class SlotMachine {
 		 System.out.println("\u001B[33m"+payoutCoin+"枚獲得!!" + "\u001B[0m");
 	}
 	
+	/**
+	 * セーブ
+	 */
 	private void save() {
 		 SaveData data = new SaveData(player.getCoin(), player.getDebtCoin(), player.getIsDebt());
 		 SaveManager.save(data);

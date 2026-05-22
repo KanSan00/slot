@@ -82,7 +82,7 @@ public class SlotMachine {
 				 System.out.println("BET枚数を変更してください");
 				 changeBet();
 			 }
-			 // 現在のっコイン枚数が0以下で、借金枚数も0以下であれば
+			 // 現在のコイン枚数が0以下で、借金枚数も0以下であれば
 			 else if(player.getCoin() <= 0 && player.getDebtCoin() <= 0) {
 				 System.out.println("コインがなくなりました");
 				 System.out.println("もう一度遊びますか？");

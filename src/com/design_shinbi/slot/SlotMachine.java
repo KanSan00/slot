@@ -15,6 +15,7 @@ public class SlotMachine {
 	List<Symbol> results = new ArrayList<Symbol>();
 	
     public static final int ACTION_BET   = 1;
+    public static final int ACTION_RESTART   = 1;
     public static final int ACTION_CHANGE_BET = 2;
     public static final int ACTION_DEBT = 3;
     public static final int ACTIN_REPAYMENT = 4;
@@ -29,7 +30,9 @@ public class SlotMachine {
 	}
 	
 	public void start() {
+		// 持っているコインの枚数が0枚であったとき
 		if(player.getCoin() <= 0) {
+			// 開始時のコイン枚数を入力して始める
 			payment();
 		}
 		
@@ -41,6 +44,7 @@ public class SlotMachine {
 			 }
 			 System.out.println("初期BET枚数： "+betCoin+"枚");
 			 
+			 // 選択アクションによってこの後の処理が変わる
 			 int action = selectAction();
 			 
 			 if(action == ACTION_BET) {
@@ -73,14 +77,17 @@ public class SlotMachine {
 				 break;
 			 }			 
 			 
+			 // 手持ちのコインが0より多いけど、現在のBET枚数より少なければ
 			 if(player.getCoin() > 0 && player.getCoin() < betCoin) {
 				 System.out.println("BET枚数を変更してください");
 				 changeBet();
-			 }else if(player.getCoin() <= 0 && player.getDebtCoin() <= 0) {
+			 }
+			 // 現在のっコイン枚数が0以下で、借金枚数も0以下であれば
+			 else if(player.getCoin() <= 0 && player.getDebtCoin() <= 0) {
 				 System.out.println("コインがなくなりました");
 				 System.out.println("もう一度遊びますか？");
 				 action = selectOnemore();
-				 if(action == ACTION_BET) {					 
+				 if(action == ACTION_RESTART) {					 
 					 payment();
 				 }
 				 else {
@@ -133,11 +140,11 @@ public class SlotMachine {
 	private int selectOnemore() {
 		String selectMessage = String.format(
 	            "[%d] START [%d] STOP (やめる)",
-	            ACTION_BET, ACTION_STOP);
+	            ACTION_RESTART, ACTION_STOP);
 		System.out.println(selectMessage);
 		
 		int action = -1;
-		while(action != ACTION_BET && action != ACTION_STOP) {
+		while(action != ACTION_RESTART && action != ACTION_STOP) {
 	        try {
 	            action = Integer.parseInt(scanner.nextLine());
 	        } catch(Exception e) {

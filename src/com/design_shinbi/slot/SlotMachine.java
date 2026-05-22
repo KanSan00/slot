@@ -89,7 +89,7 @@ public class SlotMachine {
 			 else if(player.getCoin() <= 0 && player.getDebtCoin() > 0){
 				 System.out.println("借金してでも返してもらおうか");
 				 player.setDebt(true);
-				 player.addDebetCoin(100);
+				 player.addDebtCoin(100);
 				 player.addCoin(100);
 				 continue;
 			 }
@@ -166,7 +166,7 @@ public class SlotMachine {
 		try {
 				int debtCoin = Integer.parseInt(scanner.nextLine());
 				player.setDebt(true);
-				player.addDebetCoin(debtCoin);
+				player.addDebtCoin(debtCoin);
 				player.addCoin(debtCoin);
 			}
 			catch(Exception e) {

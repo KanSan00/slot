@@ -38,7 +38,7 @@ public class Player {
 		coin -= useCoin;
 	}
 	
-	public void addDebetCoin(int addDebtCoin) {
+	public void addDebtCoin(int addDebtCoin) {
 		debtCoin += addDebtCoin;
 	}
 	
